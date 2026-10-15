@@ -5,7 +5,9 @@ pipeline {
     steps {
     sh '''
     apt upade && apt install nginx -y
-    sh '''
+        sh '''
+    }
+    }
       stage("Test Services") {
         steps {
         sh '''
@@ -13,9 +15,14 @@ pipeline {
         systemctl start nginx
         systemctl status nginx
         sh '''
+        }
+      }
         stage("Deploy") {
           steps {
             sh '''
             http://192.168.200.165:80
             sh '''
-    
+          }
+        }
+  }
+}
