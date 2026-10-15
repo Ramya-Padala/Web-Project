@@ -1,28 +1,45 @@
+
 pipeline {
-  agent any 
-  stages {
-    stage("Build") {
-    steps {
-    sh '''
-    sudo apt update && sudo apt install nginx -y
-        sh '''
-    }
-    }
-      stage("Test Services") {
-        steps {
-        sh '''
-        sudo systemctl enable nginx
-        sudo systemctl start nginx
-        sudo systemctl status nginx
-        sh '''
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh '''
+                    set -e
+                    sudo -n apt-get update
+                    sudo -n apt-get install -y nginx
+                '''
+            }
         }
-      }
-        stage("Deploy") {
-          steps {
-            sh '''
-            http://192.168.200.165:80
-            sh '''
-          }
+
+        stage('Test Services') {
+            steps {
+                sh '''
+                    set -e
+                    sudo -n systemctl enable nginx
+                    sudo -n systemctl start nginx
+                    sudo -n systemctl is-active nginx
+                '''
+            }
         }
-  }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    set -e
+                    curl -fI http://127.0.0.1:80
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the console output.'
+        }
+    }
 }
