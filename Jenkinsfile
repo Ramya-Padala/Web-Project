@@ -4,16 +4,16 @@ pipeline {
     stage("Build") {
     steps {
     sh '''
-    apt upade && apt install nginx -y
+    sudo apt update && sudo apt install nginx -y
         sh '''
     }
     }
       stage("Test Services") {
         steps {
         sh '''
-        systemctl enable nginx
-        systemctl start nginx
-        systemctl status nginx
+        sudo systemctl enable nginx
+        sudo systemctl start nginx
+        sudo systemctl status nginx
         sh '''
         }
       }
